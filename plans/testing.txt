@@ -1,0 +1,9 @@
+https://docs.python.org/3/library/unittest.html
+import unittest
+elég alap egyszerûnek tûnik a használat (még kipróbálom) és nem kell telepíteni semmit.
+
+Amennyiben több kell:
+https://wiki.python.org/moin/PythonTestingToolsTaxonomy
+
+Ismét csak egyszerûnek látszik a doctest:
+http://docs.python-guide.org/en/latest/writing/tests/
