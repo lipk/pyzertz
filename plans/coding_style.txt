@@ -1,0 +1,20 @@
+LEGFONTOSABB:
+
+Osztálynevek: camelCase
+Minden más: snake_case
+Indentáció: 4 space
+    (vim:
+     set expandtab
+     set tabstop=4
+     set softtabstop=4
+     set shiftwidth=4
+    )
+Változónevek: inkább értelmes, mint rövid
+
+KEVÉSBÉ FONTOS:
+
+Kód: angol
+Kommentek: angol (magyar?)
+Doc stringek: egyelőre nem, aztán majd meglátjuk
+Git commitok: kicsi commitok értelmes commit message
+Git commit message: angol (magyarul nagyon nehéz jó commit messaget írni :()
