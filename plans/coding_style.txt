@@ -18,3 +18,7 @@ Kommentek: angol (magyar?)
 Doc stringek: egyelőre nem, aztán majd meglátjuk
 Git commitok: kicsi commitok értelmes commit message
 Git commit message: angol (magyarul nagyon nehéz jó commit messaget írni :()
+
+LINTEREK
+
+Style check szerintem nem kell, logic checker viszont jó jöhet. Szóval pyflakes.
