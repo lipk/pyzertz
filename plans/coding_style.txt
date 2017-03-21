@@ -10,6 +10,8 @@ Indentáció: 4 space
      set shiftwidth=4
     )
 Változónevek: inkább értelmes, mint rövid
+Annotációk: argumentumhoz típusokat annotációként, függvény visszatérési típusa
+            szintén annotálva
 
 KEVÉSBÉ FONTOS:
 
