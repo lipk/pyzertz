@@ -1,10 +1,10 @@
 class Tile:
-    type = 0
-    row = 0
-    col = 0
+    #type = 0
+    #row = 0
+    #col = 0
     
     def __init__(self , type : int, col : int, row : int):
-        self.type=type
+        self.type=type  #0 - empty, 1 - white, 2 - gray, 3 - black 
         self.col=col
         self.row=row
 
@@ -19,6 +19,7 @@ class Tile:
 class Table:
     size = 0
     tiles = []
+    marbles = [6,8,10] #white, gray, black
     
     def __init__(self, size : int):
         self.size=size
@@ -37,6 +38,8 @@ class Table:
         
         
     def __str__(self):
+        #return '\n'.join([' '.join(map(str,row) for row in self.tiles])
+		#return '\n'.join(map(lambda row:map(str,row),self.tiles))
         s=""
         for row in self.tiles:
             for t in row:
@@ -53,15 +56,15 @@ class Table:
             
 t=Table(3)
 
-t.get(0,0).type=1
-t.get(-3,0).type=1
-t.get(-2,-1).type=2
+#t.get(0,0).type=1
+#t.get(-3,0).type=1
+#t.get(-2,-1).type=2
 
-print(t)
+#print(t)
 
-print("------------")
-for i in range(6):
-    for j in range(6):
-        print(i,j)
+#print("------------")
+#for i in range(6):
+#    for j in range(6):
+#        print(i,j)
 #print("-3:" , t.get(-3,-3).coord())
 
