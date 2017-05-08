@@ -8,7 +8,8 @@ class Button:
     # action : func
     # color: (int, int, int)
 
-    def __init__(self , x : int, y : int, length : int, height : int, color: (int,int,int), text : str, action : 'function' = None):
+    def __init__(self , x : int, y : int, length : int, height : int,
+            color: (int,int,int), text : str, action : 'function' = None):
         self.rect = (x,y,length,height)
         self.color = color
         self.text = text
@@ -19,19 +20,19 @@ class Button:
         
 
     def action(self, *args, **kwargs):
-        self.handle(self, *args, **kwargs)
+        return self.handle(self, *args, **kwargs)
 
-    def draw_button(self, surface: pygame.Surface):           
+    def draw_button(self, surface: pygame.Surface) -> pygame.Surface:           
         pygame.draw.rect(surface, self.color, self.rect, 0)
-        self.write_text(surface)
-        print(surface.__class__)
-        return surface
+        return self.write_text(surface)
     
-    def write_text(self, surface: pygame.Surface):
+    def write_text(self, surface: pygame.Surface) -> pygame.Surface:
         font_size = int(self.rect[2]//len(self.text))
         myFont = pygame.font.SysFont("Calibri", font_size)
         myText = myFont.render(self.text, 1, (0,0,0))
-        surface.blit(myText, ((self.rect[0]+self.rect[2]/2) - myText.get_width()/2, (self.rect[1]+self.rect[3]/2) - myText.get_height()/2))
+        surface.blit(myText, ((self.rect[0]+self.rect[2]/2) \
+                - myText.get_width()/2, (self.rect[1]+self.rect[3]/2) \
+                - myText.get_height()/2))
         return surface
 
     def pressed(self, mouse:'mouse pos') -> bool:
