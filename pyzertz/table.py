@@ -1,10 +1,12 @@
+import copy
+
 class Tile:
     #type = 0
     #row = 0
     #col = 0
     
     def __init__(self , type : int, col : int, row : int):
-        self.type=type  #0 - empty, 1 - white, 2 - gray, 3 - black 
+        self.type=type  #-1 - not exists, 0 - empty, 1 - white, 2 - gray, 3 - black 
         self.col=col
         self.row=row
 
@@ -14,6 +16,11 @@ class Tile:
     def coord(self):
         return("col: " + str(self.col) + " row: " + str(self.row))
         
+    def copy(self):
+        t=Tile(self.type,self.col,self.row)
+        t.type=self.type
+        t.col=self.col
+        t.row=self.row
     
     
     
@@ -36,6 +43,17 @@ class Table:
                 self.tiles.insert(i,row2)    
             self.tiles.insert(i,row1)
 
+    def copy(self):
+        t = Table(3)
+        t.size=self.size
+        for i in range(-3,4):
+            for j in range(-3,4):
+                if -3 <= i+j <=3:
+                    print("Kakaaiiiiiiiiii ",self.tiles[i][j])
+                    t.tiles[i][j]=self.tiles[i][j].copy()
+        t.marbles = copy.deepcopy(self.marbles)
+            
+            
         
         
     def __str__(self):
@@ -54,18 +72,5 @@ class Table:
             return self.tiles[row+self.size][col+self.size+min(0,row)]
         else:
             pass
-            
-#t=Table(3)
-
-#t.get(0,0).type=1
-#t.get(-3,0).type=1
-#t.get(-2,-1).type=2
-
-#print(t)
-
-#print("------------")
-#for i in range(6):
-#    for j in range(6):
-#        print(i,j)
-#print("-3:" , t.get(-3,-3).coord())
+           
 

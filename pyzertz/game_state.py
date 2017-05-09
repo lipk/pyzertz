@@ -1,5 +1,6 @@
 import table
 import os
+import copy
 
 class Player:
     def __init__(self, name):
@@ -8,18 +9,41 @@ class Player:
         
     def __str__(self):
         return self.name
+        
+    def copy(self):
+        p=Player(self.name)
+        p.marbles=copy.deepcopy(self.marbles)
+        return p
 	
+class State:
+    def __init__(self):
+        self.pl1 = Player("Odon")
+        self.pl2 = Player("Bela")
+        self.t=table.Table(3)
+    
+        self.winner = None
+        self.act=self.pl1
+        
+        self.t.get(0,0).type=1
+        self.t.get(-3,0).type=1
+        self.t.get(-2,-1).type=2
+        
+    def copy(self):
+        s = State()
+        s.pl1 = self.pl1.copy()
+        s.pl2 = self.pl2.copy()
+        s.t=self.t.copy()
+        s.act = self.act.copy()
+        
+        if self.winner:
+            s.winner = self.winner.copy()
+        else:
+            s.winner = None
+        
 
-pl1 = Player("Odon")
-pl2 = Player("Bela")
-winner = None  
-act = pl1
-t=table.Table(3)
+s=State() 
 
-t.get(0,0).type=1
-t.get(-3,0).type=1
-t.get(-2,-1).type=2
-print(t)
+#print(t)
 
 def isValidPlace(move, t):
     x = move[0]
@@ -37,9 +61,11 @@ def isValidPlace(move, t):
     
     return True
 
-def place(move, t):
-    t.marbles[move[2]] -= 1
-    t.get(move[0],move[1]).type = move[2]+1
+def place(move, state):
+    s = state.copy()
+    s.t.marbles[move[2]] -= 1
+    s.t.get(move[0],move[1]).type = move[2]+1
+    return s
     
 def isValidRemove(move,t):
     x = move[0]
@@ -75,17 +101,34 @@ def isValidRemove(move,t):
     return True
         
         
-def remove(move,t):
-    t.get(move[0],move[1]).type=-1
+def remove(move,state):
+    s=state.copy()
+    s.t.get(move[0],move[1]).type=-1
+    return s
     
+
+def isValidJump(move,t):
+    [x1,y1,x2,y2] = move
+    if ((x1-x2)**2+(y1-y2)**2)**0.5 !=2:
+        return False
+    if not (1 <= t.get((x1+x2)/2,(y1+y2)/2).type <= 3):
+        return False
+    
+    return True
+
+def isThereAValidCaptureFromOneTile(tile,t):
+    directions = [[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]]
+    
+    for d in directions:
+        if isValidJump(tile[0],tile[1],t.get(tile[0]+2*d[0],tile[1]+2*d[1])):
+            pass
+    
+
      
-def isValidCaptureFromOneTile(move,t):
-     
-     
-while (not winner):
+while (not s.winner):
     #os.system('cls')
-    print(t)
-    print(act.name + " moves")
+    print(s.t)
+    print(s.act.name + " moves")
     print("What do you want? Place a marble, and remove a ring (p), or capture some marbles(c)?")
     
     if input('') == 'p':
@@ -93,8 +136,8 @@ while (not winner):
         move = input('').split(' ')
         if (len(move)>2):
             move = list(map(int, move))
-            if isValidPlace(move,t):
-                place(move,t)
+            if isValidPlace(move,s.t):
+                s=place(move,s)
             else:
                 print('You can not cheat with place!')
                 break
@@ -106,8 +149,8 @@ while (not winner):
         move = input('').split(' ')
         if (len(move)>1):
             move = list(map(int, move))
-            if isValidRemove(move,t):
-                remove(move,t)
+            if isValidRemove(move,s.t):
+                s=remove(move,s)
             else:
                 print('You can not cheat with remove!')    
                 break
@@ -118,23 +161,30 @@ while (not winner):
             
     else:
         print('From where and where to do you want to jump? (1 2 3 0 means jump from ring(1,2) to ring(3,0))')
+        move = input('').split(' ')
+        if (len(move)>3):
+            move = list(map(int, move))
+            if isValidJump(move,s.t):
+                pass
+                #jump(move,s.t)
+        else:
+            print("You will not cheat with jump!")
+    
+    
+    
+    if (sum(s.t.marbles) == 0):
+        s.winner = "draw"
         
-    
-    
-    
-    if (sum(t.marbles) == 0):
-        winner = "draw"
-        
-    if (act.marbles[0]==4 or act.marbles[1]==5 or act.marbles[2]==6):
-        winner = act
+    if (s.act.marbles[0]==4 or s.act.marbles[1]==5 or s.act.marbles[2]==6):
+        s.winner = s.act
 
-    if (act.marbles[0]>2 and act.marbles[1]>2 and act.marbles[2]>2):
-        winner = act
+    if (s.act.marbles[0]>2 and s.act.marbles[1]>2 and s.act.marbles[2]>2):
+        s.winner = s.act
         
-    if (act == pl1):
-        act = pl2
+    if (s.act == s.pl1):
+        s.act = s.pl2
     else:
-        act = pl1
+        s.act = s.pl1
     
         
-print("The winner is: " + winner)
+print("The winner is: " + s.winner)
