@@ -17,19 +17,19 @@ class TableView:
     # game_board: list(TileView)
     # pl1_view pl2_view
     # marble_stack: the available marbles
-    def __init__(self, table: Table, pl1: Player, pl2: Player, surface: pygame.Surface): 
-        self.table = table
-        self.pl1 = pl1
-        self.pl2 = pl2
+    def __init__(self, state: State, surface: pygame.Surface): 
+        pl1 = state.pl1
+        pl2 = state.pl2
+        table = state.t
         self.game_board = []
         r = TableView.TILE_RADIUS
-        for i in range(-4,4):
-            for j in range(-4,4):
+        for i in range(-3,4):
+            for j in range(-3,4):
                 if math.fabs(i+j)<=3:
-                    self.game_board.append(TileView(self.table.get(i,j),\
+                    self.game_board.append(TileView(table.get(i,j),\
                             TableView.TABLE_POS[0], TableView.TABLE_POS[1],\
                             r, TableView.TILE_COLOR))
-        self.pl1_view = PlayerView(pl1, (0,0)*3)
+        self.pl1_view = PlayerView(pl1, (0,0))
         self.pl2_view = PlayerView(pl2, (520-TableView.TILE_RADIUS*2,0))
         self.marble_stack = []
         W = surface.get_width()
@@ -42,19 +42,20 @@ class TableView:
                 TableView.BLACK, str(table.marbles[2])))
 
 
-    def draw(self, surface: pygame.Surface) -> pygame.Surface:
+    def draw(self, surface: pygame.Surface, state: State) -> pygame.Surface:
         surface.fill(TableView.BGCOLOR)
         for tile in self.game_board:
-            tile.draw_button(surface)
-        self.pl1_view.draw(surface)
-        self.pl2_view.draw(surface)
-        for btn in self.marble_stack:
+            tile.draw_button(surface,state.t.get(tile.col, tile.row))
+        self.pl1_view.draw(surface, state.pl1)
+        self.pl2_view.draw(surface, state.pl2)
+        for i in range(len(state.t.marbles)):
+            btn = self.marble_stack[i]
+            btn.text = str(state.t.marbles[i])
             btn.draw_button(surface)
 
 class PlayerView:
 
     def __init__(self, pl: Player, pos: (int, int)):
-        self.player = pl
         self.pos = pos
         r = int(TableView.TILE_RADIUS/2)
         self.buttons = [CircleButton(pos[0]+r*2, \
@@ -67,13 +68,15 @@ class PlayerView:
                 r*9, r, \
                 TableView.BLACK, str(pl.marbles[2])))
     
-    def draw(self, surface: pygame.Surface):
-        for btn in self.buttons:
+    def draw(self, surface: pygame.Surface, player: Player):
+        for i in range(len(self.buttons)):
+            btn = self.buttons[i]
+            btn.text = str(player.marbles[i])
             btn.draw_button(surface)
 
-        font_size = int(TableView.TILE_RADIUS*3//len(self.player.name))
+        font_size = int(TableView.TILE_RADIUS*3//len(player.name))
         myFont = pygame.font.SysFont("Calibri", font_size)
-        myText = myFont.render(self.player.name, 1, (0,0,0))
+        myText = myFont.render(player.name, 1, (0,0,0))
         surface.blit(myText, (self.pos[0]+TableView.TILE_RADIUS/2,\
                 self.pos[1] + TableView.TILE_RADIUS/2))
 

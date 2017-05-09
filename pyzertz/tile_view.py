@@ -3,13 +3,19 @@ from table import *
 import math
 
 class TileView(Button):
+    GREY  = (100,100,100)
+    BLACK = (0,0,0)
+    WHITE = (255,255,255)
+    COLORS = (WHITE, GREY, BLACK)
     # color: fill color
     # pointlist: vertices
     # center: (int, int) pixel koords
-    # tile: Tile
+    # col: int column ind
+    # row: int row ind
     def __init__(self , tile: Tile, start_x: int, start_y: int, size: int,\
             color: (int,int,int), action : 'function' = None):
-        self.tile = tile
+        self.col = tile.col
+        self.row = tile.row
         self.color = color
         self.size = size
         self.center = hex_to_pixel((tile.col,tile.row),size)
@@ -25,9 +31,15 @@ class TileView(Button):
         
         self.handle = action if action else default_handler
     
-    def draw_button(self, surface: pygame.Surface) -> pygame.Surface: 
+    def draw_button(self, surface: pygame.Surface, tile: Tile) -> pygame.Surface: 
+        if tile.type == -1:
+            pass
         pygame.draw.polygon(surface, self.color, self.pointlist, 0)
         pygame.draw.polygon(surface, (0,0,0), self.pointlist, 1)
+        if tile.type == 0:
+            return surface
+        color = TileView.COLORS[tile.type-1]
+        pygame.draw.circle(surface, color, self.center, self.size, 0)
         return surface
 
     def pressed(self, mouse:'mouse pos') -> bool:
