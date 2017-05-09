@@ -22,7 +22,7 @@ class Button:
     def action(self, *args, **kwargs):
         return self.handle(self, *args, **kwargs)
 
-    def draw_button(self, surface: pygame.Surface) -> pygame.Surface:           
+    def draw_button(self, surface: pygame.Surface) -> pygame.Surface: 
         pygame.draw.rect(surface, self.color, self.rect, 0)
         return self.write_text(surface)
     
