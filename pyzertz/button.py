@@ -48,5 +48,5 @@ class Button:
         else: return False
 
 def default_handler(btn : Button, *args, **kwargs):
-    print("No action added to this button " + btn.text)
+    pass #print("No action added to this button " + btn.text)
 
