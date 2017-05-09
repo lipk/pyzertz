@@ -13,6 +13,7 @@ class Tile:
         
     def coord(self):
         return("col: " + str(self.col) + " row: " + str(self.row))
+        
     
     
     
@@ -33,8 +34,8 @@ class Table:
                     row2.append(Tile(0,j-self.size,self.size-i))
             if i != self.size:
                 self.tiles.insert(i,row2)    
-            self.tiles.insert(i,row1)    
-                
+            self.tiles.insert(i,row1)
+
         
         
     def __str__(self):
@@ -54,7 +55,7 @@ class Table:
         else:
             pass
             
-t=Table(3)
+#t=Table(3)
 
 #t.get(0,0).type=1
 #t.get(-3,0).type=1

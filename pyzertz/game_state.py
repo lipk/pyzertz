@@ -49,7 +49,29 @@ def isValidRemove(move,t):
 
     if t.get(x,y).type != 0:
         return False  
-
+        
+    directions = [[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]]
+    i = 0
+    isFirstFree = False
+    k = -5
+    for d in directions:
+        xx = x + d[0]
+        yy = y + d[1]
+        if not (-3<=xx<=3 and -3<=yy<=3 and -3<=xx+yy<=3) or t.get(xx,yy).type==-1:
+            if k==i-1:
+                break
+            else: 
+                k=i
+                if i == 0:
+                    isFirstFree = True       
+        #print("direction",i,d,xx,yy)
+        i += 1
+    
+    if k==5 and isFirstFree:
+        pass
+    elif i==6:
+        return False
+            
     return True
         
         
@@ -57,8 +79,11 @@ def remove(move,t):
     t.get(move[0],move[1]).type=-1
     
      
+def isValidCaptureFromOneTile(move,t):
+     
+     
 while (not winner):
-    os.system('cls')
+    #os.system('cls')
     print(t)
     print(act.name + " moves")
     print("What do you want? Place a marble, and remove a ring (p), or capture some marbles(c)?")
@@ -71,10 +96,10 @@ while (not winner):
             if isValidPlace(move,t):
                 place(move,t)
             else:
-                print('You can not cheat!')
+                print('You can not cheat with place!')
                 break
         else:
-            print("You will not cheat!")
+            print("You will not cheat with place!")
             break
         
         print('Which ring do you want to remove? (4 3 means remove ring (4,3))')
@@ -84,17 +109,16 @@ while (not winner):
             if isValidRemove(move,t):
                 remove(move,t)
             else:
-                print('You can not cheat!')    
+                print('You can not cheat with remove!')    
                 break
         else:
-            print("You will not cheat!")
+            print("You will not cheat with remove!")
             break
             
             
     else:
-        print('capture')
-     
-
+        print('From where and where to do you want to jump? (1 2 3 0 means jump from ring(1,2) to ring(3,0))')
+        
     
     
     
