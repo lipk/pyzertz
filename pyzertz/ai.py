@@ -1,22 +1,22 @@
 def think(init, succ, score, minim : bool, thres=None):
     better = int.__lt__ if minim else int.__gt__
-    initScore = score(init)
-    if initScore != None:
-        return (initScore, [])
-    nextStates = succ(init)
-    if nextStates == []:
+    init_score = score(init)
+    if init_score != None:
+        return (init_score, [])
+    next_states = succ(init)
+    if next_states == []:
         raise ValueError
-    (bestScore, bestPath) = think(nextStates[0][0], succ, score, not minim, None)
-    bestPath = [nextStates[0][1]] + bestPath
-    if thres != None and better(bestScore, thres):
+    (best_score, best_path) = think(next_states[0][0], succ, score, not minim, None)
+    best_path = [next_states[0][1]] + best_path
+    if thres != None and better(best_score, thres):
         return (thres, [])
-    for (state, action) in nextStates[1:]:
-        (nextScore, path) = think(state, succ, score, not minim, bestScore)
-        if thres != None and better(nextScore, thres):
+    for (state, action) in next_states[1:]:
+        (next_score, path) = think(state, succ, score, not minim, best_score)
+        if thres != None and better(next_score, thres):
             return (thres, [])
-        elif better(nextScore, bestScore):
-            (bestScore, bestPath) = (nextScore, [action] + path)
-    return (bestScore, bestPath)
+        elif better(next_score, best_score):
+            (best_score, best_path) = (next_score, [action] + path)
+    return (best_score, best_path)
 
 #TODO: replace with real impl
 class GameState:
