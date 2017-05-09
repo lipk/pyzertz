@@ -40,6 +40,7 @@ class State:
         else:
             s.winner = None
         
+        return s
 
 s=State() 
 
@@ -64,6 +65,7 @@ def isValidPlace(move, t):
 def place(move, state):
     s = state.copy()
     s.t.marbles[move[2]] -= 1
+    print("kukiiiiiiiiiiiii",move)
     s.t.get(move[0],move[1]).type = move[2]+1
     return s
     
@@ -126,8 +128,8 @@ def isThereAValidCaptureFromOneTile(tile,t):
 
      
 while (not s.winner):
-    #os.system('cls')
-    print(s.t)
+    os.system('cls')
+    print(s.t,'kuki')
     print(s.act.name + " moves")
     print("What do you want? Place a marble, and remove a ring (p), or capture some marbles(c)?")
     
