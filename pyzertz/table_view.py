@@ -28,7 +28,7 @@ class TableView:
                 if math.fabs(i+j)<=3:
                     self.game_board.append(TileView(table.get(i,j),\
                             TableView.TABLE_POS[0], TableView.TABLE_POS[1],\
-                            r, TableView.TILE_COLOR))
+                            r, TableView.TILE_COLOR, lambda btn : print(btn.col, btn.row)))
         self.pl1_view = PlayerView(pl1, (0,0))
         self.pl2_view = PlayerView(pl2, (520-TableView.TILE_RADIUS*2,0))
         self.marble_stack = []

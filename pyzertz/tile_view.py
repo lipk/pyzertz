@@ -21,6 +21,7 @@ class TileView(Button):
         self.center = hex_to_pixel((tile.col,tile.row),size)
         height = 2*size
         width = math.sqrt(3)*size
+        self.width = width/2
         
         self.center = (self.center[0] + start_x + 3*width, self.center[1]\
                 + start_y + 0.75 * 3 * height)
@@ -33,13 +34,14 @@ class TileView(Button):
     
     def draw_button(self, surface: pygame.Surface, tile: Tile) -> pygame.Surface: 
         if tile.type == -1:
-            pass
+            return surface
         pygame.draw.polygon(surface, self.color, self.pointlist, 0)
         pygame.draw.polygon(surface, (0,0,0), self.pointlist, 1)
         if tile.type == 0:
             return surface
         color = TileView.COLORS[tile.type-1]
-        pygame.draw.circle(surface, color, self.center, self.size, 0)
+        intcenter = (int(self.center[0]), int(self.center[1]))
+        pygame.draw.circle(surface, color, intcenter, int(self.width), 0)
         return surface
 
     def pressed(self, mouse:'mouse pos') -> bool:
