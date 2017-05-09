@@ -65,7 +65,6 @@ def isValidPlace(move, t):
 def place(move, state):
     s = state.copy()
     s.t.marbles[move[2]] -= 1
-    print("kukiiiiiiiiiiiii",move)
     s.t.get(move[0],move[1]).type = move[2]+1
     return s
     
@@ -111,29 +110,64 @@ def remove(move,state):
 
 def isValidJump(move,t):
     [x1,y1,x2,y2] = move
+    if not (isValidTile([x1,y1],t) and isValidTile([x2,y2],t)):
+        return False
     if ((x1-x2)**2+(y1-y2)**2)**0.5 !=2:
         return False
-    if not (1 <= t.get((x1+x2)/2,(y1+y2)/2).type <= 3):
+    if not (1 <= t.get(int((x1+x2)/2),int((y1+y2)/2)).type <= 3):
         return False
     
     return True
-
+    
+def isValidTile(tile,t):
+    if not(-3<=tile[0]<=3 and -3<=tile[1]<=3 and -3<=tile[0]+tile[1]<=3):
+        return False
+    if t.get(tile[0],tile[1]).type == -1:
+        return False
+    return True
+    
 def isThereAValidCaptureFromOneTile(tile,t):
+    if not isValidTile(tile,t):
+        return False
     directions = [[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]]
     
     for d in directions:
-        if isValidJump(tile[0],tile[1],t.get(tile[0]+2*d[0],tile[1]+2*d[1])):
-            pass
+        xx=tile[0]+2*d[0]
+        yy=tile[1]+2*d[1]
+        if isValidTile([xx,yy],t) and isValidJump([tile[0],tile[1],xx,yy],t):
+            return True
     
+    return False
 
-     
+def isThereAValidCaptureFromAnyTile(t):
+    for i in range(-3,4):
+        for j in range(-3,4):
+            if isValidTile([i,j],t):
+                if isThereAValidCaptureFromOneTile([i,j],t):
+                    return True
+    return False
+
+def jump(move, state):
+    s=state.copy()
+    [x1,y1,x2,y2] = move
+    xx=(x1+x2)/2
+    yy=(y1+y2)/2
+    
+    s.t.get(x2,y2).type=s.t.get(x1,y1).type
+    s.t.get(x1,y1).type=0
+    s.act.marbles[s.t.get(xx,yy).type-1] += 1
+    s.t.get(xx,yy).type=0
+    
+    return s
+    
+    
 while (not s.winner):
     os.system('cls')
-    print(s.t,'kuki')
+    print(s.t)
     print(s.act.name + " moves")
-    print("What do you want? Place a marble, and remove a ring (p), or capture some marbles(c)?")
+    #print("What do you want? Place a marble, and remove a ring (p), or capture some marbles(c)?")
     
-    if input('') == 'p':
+    if not isThereAValidCaptureFromAnyTile(s.t):
         print('Where and which marble do you want to place? (4 3 2 means put marble type 2 to (4,3))')
         move = input('').split(' ')
         if (len(move)>2):
@@ -164,15 +198,23 @@ while (not s.winner):
     else:
         print('From where and where to do you want to jump? (1 2 3 0 means jump from ring(1,2) to ring(3,0))')
         move = input('').split(' ')
-        if (len(move)>3):
+        move = list(map(int, move))        
+        while(isThereAValidCaptureFromOneTile([move[0],move[1]],s.t)):
+            if (len(move)>3):
+                if isValidJump(move,s.t):
+                    pass
+                    s=jump(move,s)
+                else:
+                    print('You can not cheat with jump!')
+                    break
+            else:
+                print("You will not cheat with jump!")
+                break
+            
+            print('Where do you want to jump now? (3 0 means jump from)',move[2],move[3])
+            move2=input('').split(' ')
+            move=[move[2],move[3],move2[0],move2[1]]
             move = list(map(int, move))
-            if isValidJump(move,s.t):
-                pass
-                #jump(move,s.t)
-        else:
-            print("You will not cheat with jump!")
-    
-    
     
     if (sum(s.t.marbles) == 0):
         s.winner = "draw"
