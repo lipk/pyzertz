@@ -50,6 +50,12 @@ class State:
         s += str(self.t) + str(self.pl1) + str(self.pl2) + '\n'
         return s
 
+    def next_player(self):
+        if self.act is self.pl1:
+            self.act = self.pl2
+        else:
+            self.act = self.pl1
+
 def isValidPlace(move, t):
     x = move[0]
     y = move[1]
@@ -143,7 +149,6 @@ def isThereAValidCaptureFromOneTile(tile,t):
         xx=tile[0]+2*d[0]
         yy=tile[1]+2*d[1]
         if isValidTile([xx,yy],t) and isValidJump([tile[0],tile[1],xx,yy],t):
-            print('innen: ',tile[0],tile[1] ,' idee: ',xx,yy)
             return True
     
     return False
@@ -170,6 +175,7 @@ def jump(move, state):
     return s
     
 ##############==============-------- MAIN --------==============##############
+'''
 s=State()     
 while (not s.winner):
     os.system('cls')
@@ -246,3 +252,4 @@ while (not s.winner):
     
         
 print("The winner is: " + str(s.winner.name))
+'''
