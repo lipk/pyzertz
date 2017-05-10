@@ -3,7 +3,7 @@ import copy
 class Tile:
     
     def __init__(self , type : int, col : int, row : int):
-        self.type=type  #-1 - not exists, 0 - empty, 1 - white, 2 - gray, 3 - black 
+        self.type=type  #(-1) - does not exists, 0 - empty, 1 - white, 2 - gray, 3 - black 
         self.col=col
         self.row=row
 
@@ -59,6 +59,7 @@ class Table:
                 s+=str(t)
                 s+=' '
             s+="\n"
+        s+="white(1):"+str(self.marbles[0])+"  gray(2):"+str(self.marbles[1])+"  black(3):"+str(self.marbles[2])+'\n'
         return s 
             
     def get(self , col : int , row : int):
