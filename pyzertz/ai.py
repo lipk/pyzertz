@@ -39,7 +39,7 @@ def get_on_board(state):
     [w3, g3, b3] = state.t.marbles
     return [6-w1-w2-w3, 8-g1-g2-g3, 10-b1-b2-b3]
 
-def create_score_func(init : GameState, player_no : int):
+def create_score_func(init, player_no : int):
     def score_func(state : GameState):
         if (state.act is state.pl2):
             print('my turn')

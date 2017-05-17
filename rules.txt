@@ -50,3 +50,16 @@ As mentioned at the beginning of these rules: the first player to obtain either 
 
 
 Based on: http://www.gipf.com/zertz/rules/rules.html
+
+How to use PyZertz
+
+The game starts immediately after launching the program. You move first and your
+captured marbles are on the left side of the screen.
+
+To place a marble on the board, first click on one of the color buttons in the
+middle on the screen then one of the hexagons of the game board. Afterwards,
+click on a tile to remove it.
+
+When you have to capture, first click on the marble you wish to capture with,
+then on the hexagon you want to jump to. When chain-capturing, you don't have to
+select the same marble before each jump.
