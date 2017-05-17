@@ -2,6 +2,8 @@
 import table_view
 import game_state
 import pygame
+import ai
+import random
 
 SELECT_MARBLE_TYPE = 1
 SELECT_TILE_FOR_PLACEMENT = 2
@@ -24,13 +26,20 @@ class GameController:
             return True
         return False
 
+    def make_ai_move(self):
+        #self.game_state = ai.make_move(self.game_state)
+        self.game_state = random.choice(ai.get_possible_moves(self.game_state))
+        if game_state.isThereAValidCaptureFromAnyTile(self.game_state.t):
+            self.state = SELECT_MARBLE_TO_CAPTURE_WITH
+        else:
+            self.state = SELECT_MARBLE_TYPE
+
     def tile_clicked(self, col: int, row: int):
         if self.should_restart():
             return True
         elif self.state == SELECT_TILE_FOR_PLACEMENT:
             move = (col, row, self.selected_marble)
-            ok = game_state.isValidPlace(move, self.game_state.t)
-            if ok:
+            if game_state.isValidPlace(move, self.game_state.t):
                 self.game_state = game_state.place(move, self.game_state)
                 self.state = SELECT_TILE_TO_REMOVE
                 return True
@@ -45,6 +54,7 @@ class GameController:
                     self.state = SELECT_MARBLE_TO_CAPTURE_WITH
                 else:
                     self.state = SELECT_MARBLE_TYPE
+                self.make_ai_move()
                 return True
             else:
                 return False
@@ -59,12 +69,17 @@ class GameController:
             jump = (src_x, src_y, col, row)
             if game_state.isValidJump(jump, self.game_state.t):
                 self.game_state = game_state.jump(jump, self.game_state)
-                if not game_state.isThereAValidCaptureFromOneTile((col, row), self.game_state.t):
+                if game_state.isThereAValidCaptureFromOneTile((col, row), self.game_state.t):
+                    self.capture_from = (col, row)
+                    self.state = SELECT_TILE_FOR_CAPTURE
+                elif game_state.isThereAValidCaptureFromAnyTile(self.game_state.t):
                     self.game_state.next_player()
-                if game_state.isThereAValidCaptureFromAnyTile(self.game_state.t):
                     self.state = SELECT_MARBLE_TO_CAPTURE_WITH
+                    self.make_ai_move()
                 else:
+                    self.game_state.next_player()
                     self.state = SELECT_MARBLE_TYPE
+                    self.make_ai_move()
                 return True
             else:
                 return False

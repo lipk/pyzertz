@@ -8,7 +8,7 @@ class TableView:
     BLACK = (0,0,0)
     WHITE = (255,255,255)
     BGCOLOR = (60,60,100)
-    TILE_COLOR = (90, 60, 90)
+    TILE_COLOR = (90, 255, 90)
     TILE_RADIUS = 30
     TABLE_POS = (245, 90)
 
